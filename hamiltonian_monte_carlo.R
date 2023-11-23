@@ -9,6 +9,17 @@ hamiltonian_monte_carlo <- function(n_samples, potential, initial_position,
   step_size = 0.1, integrator = leapfrog, max_energy_change = 1000.0,
   do_reject = TRUE
 ) {
+  #' Run Hamiltonian Monte Carlo sampling.
+  #'
+  #' @param n_samples Number of samples to return
+  #' @param negative_log_prob The negative log probability from which to sample
+  #' @param initial_position A place from which to start sampling.
+  #' @param path_len How long each integration path is. Smaller is faster and
+  #' more correlated (L).
+  #' @param step_size How long each integration step is. Smaller is slower and
+  #' more accurate (epsilon).
+  #' @param integrator Integrator to use, from `leapfrog.R`
+  #' @param do_reject Turn off metropolis correction. Not valid MCMC if False!
   initial_position <- array(initial_position)
   negative_log_prob <- function(q) potential(q)[1]  # NOQA
   dVdq <- function(q) potential(q)[2]  # NOQA
@@ -47,7 +58,23 @@ hamiltonian_monte_carlo <- function(n_samples, potential, initial_position,
     p_accept <- exp(energy_change)
 
     if (runif(1) < p_accept) {
-      
+      samples <- c(samples, list(q_new))
+      accepted <- c(accepted, TRUE)
+    } else {
+      if (do_reject) {
+        samples <- c(samples, list(samples[length(samples)]))
+      } else {
+        samples <- c(samples, list(q_new))
+      }
+      accepted <- c(accepted, FALSE)
     }
+    p_accepts <- c(p_accepts, p_accept)
   }
+  return(list(
+    samples = array(samples[-1]),
+    sample_positions = array(sample_positions),
+    sample_momentums = array(sample_momentums),
+    accepted = array(accepted),
+    p_accepts = array(p_accepts)
+  ))
 }
