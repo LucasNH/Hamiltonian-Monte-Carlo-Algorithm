@@ -1,7 +1,9 @@
 # here: want to make an R Shiny site based on the algorithm
 library(shiny)
-
+library(shinycssloaders)
 # below: codes for the project
+
+options(spinner.color="#9dabf5", spinner.color.background="#ffffff", type = 6)
 
 ui = fluidPage(
 
@@ -29,7 +31,7 @@ ui = fluidPage(
       
       # below the textoutput is a placeholder
       #verbatimTextOutput(outputId = "HMC_results")
-      plotOutput(outputId = "HMC_plot")
+      withSpinner(plotOutput(outputId = "HMC_plot"), type = 6),
       
     )
   )
@@ -101,8 +103,13 @@ server <- function(input, output) {
   output$HMC_plot <- renderPlot({
     mean(D)
     p = seq(0,1, length=1000)
-    hist(HMC_values(), breaks = 'scott', freq = FALSE, xlim = c(0,1))
-    #curve(dbeta(x,input$alpha_prime, input$beta_prime), col = 'red', add = TRUE)
+    hist(HMC_values(), breaks = 'scott', freq = FALSE, xlim = c(0,1),
+         border = "#ffffff",
+         xlab = "Values of the Chain",
+         main = "Histogram of the Densities of the Chain")
+    n = 100
+    x = rbinom(n, 1, 0.5)
+    curve(dbeta(x,input$alpha_prime, input$beta_prime), col = 'red', add = TRUE)
   })
   
 }
