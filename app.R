@@ -71,7 +71,6 @@ server = function(input, output) {
   })
   
   output$HMC_plot = renderPlot({
-    p = seq(0,1, length=1000)
     hist(HMC_values(), breaks = 'scott', freq = FALSE,
          border = "#ffffff",
          xlab = "Values of the Chain",
@@ -79,9 +78,9 @@ server = function(input, output) {
     n = 100
 
     if(input$graph_type == "beta"){
-      curve(dbeta(x,input$alpha_prime, input$beta_prime), col = 'red', add = TRUE)
+      curve(dbeta(x,input$alpha_prime, input$beta_prime), col = "#FF6666", add = TRUE, lwd = 2)
     } else if (input$graph_type == "norm"){
-      curve(dnorm(x,0, 1), col = 'red', add = TRUE)
+      curve(dnorm(x,0, 1), col = "#6699FF", add = TRUE, lwd = 2)
     }
   })
   
