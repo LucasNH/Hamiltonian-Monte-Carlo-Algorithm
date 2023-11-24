@@ -15,13 +15,17 @@ grad_U <- function(q, type, alpha = 50, beta = 50) {
 
 HMC <- function(n_samples, U_type, epsilon, L, current_q, alpha = 50, beta = 50,
                 mu = 0, sigma = 1) {
-  # n_samples: the number of samples we want to obtain.
-  # U_type: the type of distribution we are sampling from.
-  # (For now, beta/normal)
-  # epsilon: the stepsize.
-  # L: number of steps per stepsize.
-  # current_q: the start value for the representative sample of our target dist.
-  # alpha, beta, mu, sigma: parameters of the U_type.
+  #' @param n_samples the number of samples we want to obtain.
+  #' @param U_type the type of distribution we are sampling from. (For now,
+  #' beta/normal)
+  #' @param epsilon the stepsize.
+  #' @param L number of steps per stepsize.
+  #' @param current_q the start value for the representative sample of our
+  #' target dist.
+  #' @param alpha parameter of the U_type,
+  #' @param beta parameter of the U_type,
+  #' @param mu parameter of the U_type,
+  #' @param sigma parameter of the U_type.
 
   q <- current_q # q represents a sample from our target distribution.
   D <- numeric(length = n_samples) # D contains our n_samples
