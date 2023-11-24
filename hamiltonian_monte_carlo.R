@@ -1,4 +1,4 @@
-# This file implements the Hamiltonian Monte Carlo Algorithm
+# This file implements the Hamiltonian Monte Carlo Algorithm (port from Python)
 
 source("leapfrog.R")
 
