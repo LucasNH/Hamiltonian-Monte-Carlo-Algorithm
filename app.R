@@ -10,8 +10,7 @@ HMC <- HMC
 # This is the front-end - user inputs and what are displayed.
 ui <- fluidPage(
   titlePanel("Hamiltonian Monte Carlo"),
-  h4("Authors from MAT332: Mark Asuncion, Simran Bilkhu, Anna Ly," +
-       " Lucas Noritomi-Hartwig"),
+  h4("Authors from MAT332: Mark Asuncion, Simran Bilkhu, Anna Ly, Lucas Noritomi-Hartwig"),
   h4("Website is used for demonstration purposes only."),
   sidebarLayout(
     sidebarPanel(
