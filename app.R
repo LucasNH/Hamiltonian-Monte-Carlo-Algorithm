@@ -14,6 +14,11 @@ ui <- fluidPage(
   h4("Website is used for demonstration purposes only."),
   sidebarLayout(
     sidebarPanel(
+      
+      numericInput(inputId = "chosen_seed",
+                   label = "Please select a seed for generating a sample.",
+                   value = 1),
+      
       selectInput(inputId = "graph_type",
                   label = "select the type of distribution to sample from",
                   selected = "beta",
@@ -33,17 +38,17 @@ ui <- fluidPage(
       ),
 
       numericInput(inputId = "bigN", label = "The number of samples",
-                   value = 5000, min = 1),
+                   value = 20000, min = 1),
       numericInput(inputId = "current_position",
                    label = "The current position of your sample", value = 0.3),
-      numericInput(inputId = "stepsize",
-                   label = "How long are you stepping to the next position?",
-                   value = 0.01),
-      strong("Remarks"),
-      p("For for beta, 0.01 leads to a reasonable result."),
-      p("For normal, use 0.2 leads to a reasonable result."),
+      #numericInput(inputId = "stepsize",
+      #             label = "How long are you stepping to the next position?",
+      #             value = 0.01),
+      #strong("Remarks"),
+      #p("For for beta, 0.01 leads to a reasonable result."),
+      #p("For normal, use 0.2 leads to a reasonable result."),
       numericInput(inputId = "num_steps",
-                   label = "How many steps are you taking?", value = 2),
+                   label = "How many steps are you taking?", value = 20),
     ),
 
     # Main panel for displaying outputs ----
@@ -56,17 +61,21 @@ ui <- fluidPage(
 )
 
 # This is the back-end.
-server <- function(input, output) {
-  HMC_values <- reactive({
+server = function(input, output) {
+  
+  global_seed = reactive(input$chosen_seed)
+  
+  HMC_values = reactive({
+    set.seed(global_seed())
     HMC(n_samples = input$bigN, U_type = input$graph_type,
-        epsilon = input$stepsize, L = input$num_steps,
+        epsilon = 0.01, L = input$num_steps,
         current_q = input$current_position, alpha = input$alpha_prime,
         beta = input$beta_prime, mu = input$mu_mean, sigma = input$sigma_sd)
   })
 
-  output$HMC_results <- renderPrint({HMC_values()})
+  output$HMC_results = renderPrint({HMC_values()})
 
-  output$HMC_plot <- renderPlot({
+  output$HMC_plot = renderPlot({
     hist(HMC_values(), breaks = "scott", freq = FALSE, border = "#ffffff",
          xlab = "Values of the Chain",
          main = "Histogram of the Densities of the Chain")
